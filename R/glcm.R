@@ -68,7 +68,7 @@ glcm <- function(RIA_data_in, off_right = 1, off_down = 0, off_z = 0, symmetric 
   list_names <- names(data_in_orig)
   if(!is.null(save_name) & (length(data_in_orig) != length(save_name))) {stop(paste0("PLEASE PROVIDE THE SAME NUMBER OF NAMES AS THERE ARE IMAGES!\n",
                                                                                 "NUMBER OF NAMES: ", length(save_name), "\n",
-                                                                                "NUMBER OF IMAGES: ", length(data_in), "\n"))
+                                                                                "NUMBER OF IMAGES: ", length(data_in_orig), "\n"))
   }
   
 

@@ -1,8 +1,8 @@
 Package: RIA
 Type: Package
 Title: Radiomics Image Analysis Toolbox for Grayscale Images
-Version: 1.1.0
-Date: 2017-06-08
+Version: 1.2.0
+Date: 2017-08-11
 Authors@R: person("Marton", "Kolossvary", role = c("aut", "cre"), email = "marton.kolossvary@cirg.hu")
 Maintainer: Marton Kolossvary <marton.kolossvary@cirg.hu>
 Description: Radiomics image analysis toolbox for grayscale 2D and 3D images. RIA calculates first-order,
