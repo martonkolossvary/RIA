@@ -73,4 +73,8 @@ RIA_image <- geometry(RIA_image, use_orig = FALSE, calc_sub = TRUE, use_slot = "
 #Batch calculation of geometry-based statistics on all discretized images and subcomponents
 RIA_image <- geometry(RIA_image, use_type = "discretized", calc_sub = TRUE)
 }
+
+}
+\references{
+\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

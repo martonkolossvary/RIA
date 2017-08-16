@@ -47,4 +47,8 @@ RIA_image <- glrlm_stat(RIA_image, use_orig = FALSE, use_slot = "glrlm$ep_8_110"
 #Batch calculation of GLRLM-based statistics on all calculated GLRLMs
 RIA_image <- glrlm_stat(RIA_image, use_type = "discretized")
 }
+
+}
+\references{
+\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

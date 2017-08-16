@@ -12,7 +12,7 @@
 
 <meta name="author" content="Márton Kolossváry" />
 
-<meta name="date" content="2017-08-11" />
+<meta name="date" content="2017-08-13" />
 
 <title>RIA package manual</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">RIA package manual</h1>
 <h4 class="author"><em>Márton Kolossváry</em></h4>
-<h4 class="date"><em>2017-08-11</em></h4>
+<h4 class="date"><em>2017-08-13</em></h4>
 
 
 
@@ -84,6 +84,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><em>load_dicom</em> does several things:</p>
 <ol style="list-style-type: decimal">
 <li><p>Converts DICOM files to RIA_image class using the <em>readDICOM</em> function of the <em>oro.dicom</em> package</p></li>
+<li><p>If <strong>mask_filename</strong> is provided, then the image is filtered one of two ways. If the <strong>mask_filename</strong> is the same as the <strong>filename</strong>, then the values in <strong>keep_mask_values</strong> indicate which voxels values to keep in the original image. This way the image can be segmented for a specific subset of voxels with given intensities. For example, if you would wish to only analyze low-density non-calcified voxels, you could set the <strong>keep_mask_values</strong> to <strong>-100:30</strong>. If a different folder is given to <strong>mask_filename</strong>, then <em>RIA</em> loads the mask image as well. Using the <strong>keep_mask_values</strong>, you can select which values you consider to indicate which voxels to keep. By convention, the default is 1. However, multiple values may be given, which is convenient in cases when several regions of interest are provided in the mask image.</p></li>
 <li><p>The 2D or 3D image is croped to the smallest bounding box still containing the whole image. It is useful to minimize the size of the image to save memory. The <strong>zero_value</strong> supplied to the <em>load_dicom</em> function is used to identify voxels not containing any data. If it is not supplied, then the smallest value present in the dataset is considered as indicating voxels without any data. If for some reason it is important that the RIA_image be the same size (same x,y,z dimensions) as the original supplied image, then this functionality can be turn off by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DICOM =<span class="st"> </span><span class="kw">load_dicom</span>(<span class="dt">filename =</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">DICOM</span><span class="ch">\\</span><span class="st">&quot;</span>, <span class="dt">crop_in =</span> <span class="ot">FALSE</span>)</code></pre></div></li>
 <li><p>Then the smallest values which indicate no data, are changed to <em>NA</em> for further calculations. If wished to be turned of, then use:</p>
@@ -563,7 +564,7 @@ DICOM$glcm$ep_2
 </div>
 <div id="batch-calculation-of-glcm-matrices-in-all-directions" class="section level2">
 <h2>Batch calculation of GLCM matrices in all directions</h2>
-<p>To achieve rotationally invariant results, usually GLCM matrices are calculated in all directions. Using RIA, with one line of code you can calulate the GLCMs in all the different directions simply by calling:</p>
+<p>To achieve rotationally invariant results, usually GLCM matrices are calculated in all directions. Using RIA, with one line of code you can calculate the GLCMs in all the different directions simply by calling:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DICOM =<span class="st"> </span><span class="kw">glcm_all</span>(DICOM, <span class="dt">use_type =</span> <span class="st">&quot;single&quot;</span>)
 <span class="co">#&gt; GLCM WAS SUCCESSFULLY ADDED TO 'ep_32_100' SLOT OF RIA_image$glcm</span>
 <span class="co">#&gt; GLCM WAS SUCCESSFULLY ADDED TO 'ep_32_010' SLOT OF RIA_image$glcm</span>
@@ -809,7 +810,7 @@ DICOM$glcm$ep_2
 </div>
 <div id="batch-calculation-of-glrlm-matrices-in-all-directions" class="section level2">
 <h2>Batch calculation of GLRLM matrices in all directions</h2>
-<p>To achieve rotationally invariant results, usually GLRLM matrices are calculated in all directions. Using RIA, with one line of code you can calulate the GLRLMs in all the different directions simply by calling:</p>
+<p>To achieve rotationally invariant results, usually GLRLM matrices are calculated in all directions. Using RIA, with one line of code you can calculate the GLRLMs in all the different directions simply by calling:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DICOM =<span class="st"> </span><span class="kw">glrlm_all</span>(DICOM, <span class="dt">use_type =</span> <span class="st">&quot;single&quot;</span>)
 <span class="co">#&gt; GLRLM WAS SUCCESSFULLY ADDED TO 'ep_32_100' SLOT OF RIA_image$glrlm</span>
 <span class="co">#&gt; GLRLM WAS SUCCESSFULLY ADDED TO 'ep_32_010' SLOT OF RIA_image$glrlm</span>

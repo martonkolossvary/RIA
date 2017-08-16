@@ -71,4 +71,8 @@ off_right = 2, off_down = -1, off_z = 0)
 RIA_image <- glcm(RIA_image, use_type = "discretized",
 off_right = 1, off_down = -1, off_z = 0)
 }
+
+}
+\references{
+\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

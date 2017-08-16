@@ -37,8 +37,8 @@
 #'
 #' @param use_slot string, name of slot where data wished to be used is. Use if the desired image
 #' is not in the \emph{data$orig} or \emph{data$modif} slot of the \emph{RIA_image}. For example,
-#' if the desired dataset is in \emph{RIA_image$dichotomized$ep_4}, then \emph{use_slot} should be
-#' \emph{dichotomized$ep_4}. The results are automatically saved. If the results are not saved to
+#' if the desired dataset is in \emph{RIA_image$discretized$ep_4}, then \emph{use_slot} should be
+#' \emph{discretized$ep_4}. The results are automatically saved. If the results are not saved to
 #' the desired slot, then please use \emph{save_name} parameter.
 #'
 #' @param save_name string, indicating the name of subslot of \emph{$glcm} to save results to.
@@ -47,21 +47,20 @@
 #' @param verbose_in logical indicating whether to print detailed information.
 #' Most prints can also be suppressed using the \code{\link{suppressMessages}} function.
 #'
-#' @return \emph{RIA_image} containing the GLCM.
+#' @return \emph{RIA_image} containing the GLCMs.
 #'
 #' @examples \dontrun{
-#' #Dichotomize loaded image and then calculate GLCM matrix of RIA_image$modif
-#' RIA_image <- dichotomize(RIA_image, bins_in = c(4, 8), equal_prob = TRUE,
+#' #Discretize loaded image and then calculate GLCM matrix of RIA_image$modif
+#' RIA_image <- discretize(RIA_image, bins_in = c(4, 8), equal_prob = TRUE,
 #' use_orig = TRUE, write_orig = FALSE)
-#' RIA_image <- glcm(RIA_image, use_orig = FALSE, verbose_in = TRUE)
+#' RIA_image <- glcm_all(RIA_image, use_type = "single")
 #'
 #' #Use use_slot parameter to set which image to use
-#' RIA_image <- glcm(RIA_image, use_orig = FALSE, use_slot = "dichotomized$ep_4",
-#' off_right = 2, off_down = -1, off_z = 0)
+#' RIA_image <- glcm_all(RIA_image, use_type = "single",
+#' use_orig = FALSE, use_slot = "discretized$ep_4")
 #' 
-#' #Batch calculation of GLCM matrices on all dichotomized images
-#' RIA_image <- glcm(RIA_image, use_type = "dichotomized",
-#' off_right = 1, off_down = -1, off_z = 0)
+#' #Batch calculation of GLCM matrices on all disretized images
+#' RIA_image <- glcm_all(RIA_image)
 #' }
 
 
@@ -69,7 +68,7 @@ glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TR
 {
     if(!any(class(RIA_data_in) == "RIA_image")) {message("PROCESSING OF RIA_image OBJECTS ARE SUPPORTED, OTHER CLASSES MIGHT CAUSE PROBLEMS! PLEASE LOAD DATA USING load_dicom")}
     
-    dim_image <- length(dim(DICOM$data$orig))
+    dim_image <- length(dim(RIA_data_in$data$orig))
     
     if(dim_image == 3 & symmetric == FALSE)  {
         offsets <- matrix(c( 1, 0, 0,
@@ -147,7 +146,7 @@ glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TR
     offsets <- offsets * distance
     
     if(!is.null(save_name) & (dim(offsets)[1] != length(save_name))) {stop(paste0("PLEASE PROVIDE THE SAME NUMBER OF NAMES AS THERE ARE IMAGES!\n",
-                                                                                       "NUMBER OF NAMES: ", length(save_name), "\n",
+                                                                                       "NUMBER OF NAMES:  ", length(save_name), "\n",
                                                                                        "NUMBER OF IMAGES: ", dim(offsets)[1], "\n"))
         }
     

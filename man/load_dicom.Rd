@@ -4,7 +4,8 @@
 \alias{load_dicom}
 \title{Loads DICOM images to RIA image format}
 \usage{
-load_dicom(filename, crop_in = TRUE, replace_in = TRUE, center_in = TRUE,
+load_dicom(filename, mask_filename = NULL, keep_mask_values = 1,
+  crop_in = TRUE, replace_in = TRUE, center_in = TRUE,
   zero_value = NULL, min_to = -1024, header_add = NULL,
   header_exclude = NULL, verbose_in = TRUE, recursive_in = TRUE,
   exclude_in = "sql", mode_in = "integer", transpose_in = TRUE,
@@ -13,6 +14,18 @@ load_dicom(filename, crop_in = TRUE, replace_in = TRUE, center_in = TRUE,
 }
 \arguments{
 \item{filename}{string, file path to directory containing \emph{dcm} files.}
+
+\item{mask_filename}{string, file path to optional directory containing \emph{dcm} files
+of mask image.}
+
+\item{keep_mask_values}{integer vector, indicates which value or values of the mask image
+to use as indicator to identify voxels wished to be processed. Usually 1-s indicate voxels
+wished to be processed. However, one mask image might contain several segmentations, in which
+case supplying several integers is allowed. Furthermore, if the same string is supplyied to
+\emph{filename} and \emph{mask_filename}, then the integers in \emph{keep_mask_values} are used
+to specify which voxel values to analyze. This way the provided image can be segmented to specific
+compontents. For example, if you wish to analyze only the low-density non-calcified component
+of coronary plaques, then \emph{keep_mask_values} can specify this by setting it to: -100:30}
 
 \item{crop_in}{logical, indicating whether to crop \emph{RIA_image} to smallest bounding box.}
 

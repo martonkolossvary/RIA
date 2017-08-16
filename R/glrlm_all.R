@@ -45,7 +45,8 @@
 #' RIA_image <- glrlm_all(RIA_image, use_type = "single")
 #'
 #' #Use use_slot parameter to set which image to use
-#' RIA_image <- glrlm_all(RIA_image, use_type = "single", use_orig = FALSE, use_slot = "discretized$ep_4")
+#' RIA_image <- glrlm_all(RIA_image, use_type = "single",
+#' use_orig = FALSE, use_slot = "discretized$ep_4")
 #' 
 #' #Batch calculation of GLCM matrices on all disretized images
 #' RIA_image <- glrlm_all(RIA_image)
@@ -55,7 +56,7 @@ glrlm_all <- function(RIA_data_in, use_type = "discretized", use_orig = FALSE, u
 {
     if(!any(class(RIA_data_in) == "RIA_image")) {message("PROCESSING OF RIA_image OBJECTS ARE SUPPORTED, OTHER CLASSES MIGHT CAUSE PROBLEMS! PLEASE LOAD DATA USING load_dicom")}
     
-    dim_image <- length(dim(DICOM$data$orig))
+    dim_image <- length(dim(RIA_data_in$data$orig))
     
     if(dim_image == 3)  {
         offsets <- matrix(c( 1, 0, 0,

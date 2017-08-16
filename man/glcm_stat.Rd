@@ -48,4 +48,8 @@ RIA_image <- glcm_stat(RIA_image, use_orig = FALSE, use_slot = "glcm$ep_8_010")
 #Batch calculation of GLCM-based statistics on all calculated GLCMs
 RIA_image <- glcm_stat(RIA_image, use_type = "discretized")
 }
+
+}
+\references{
+\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

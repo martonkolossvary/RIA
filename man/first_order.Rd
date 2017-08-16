@@ -57,4 +57,8 @@ RIA_image <- first_order(RIA_image, use_orig = FALSE, use_slot = "discretized$ep
 #Batch calculation of first-order statistics on all discretized images
 RIA_image <- first_order(RIA_image, use_type = "discretized")
 }
+
+}
+\references{
+\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

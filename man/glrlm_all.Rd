@@ -55,7 +55,8 @@ use_orig = TRUE, write_orig = FALSE)
 RIA_image <- glrlm_all(RIA_image, use_type = "single")
 
 #Use use_slot parameter to set which image to use
-RIA_image <- glrlm_all(RIA_image, use_type = "single", use_orig = FALSE, use_slot = "discretized$ep_4")
+RIA_image <- glrlm_all(RIA_image, use_type = "single",
+use_orig = FALSE, use_slot = "discretized$ep_4")
 
 #Batch calculation of GLCM matrices on all disretized images
 RIA_image <- glrlm_all(RIA_image)

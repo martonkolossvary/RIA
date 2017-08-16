@@ -121,3 +121,39 @@ names(DICOM$glcm)
 DICOM = glcm_all(DICOM, use_type = "discretized")
 names(DICOM$glcm)
 
+## ------------------------------------------------------------------------
+DICOM = glrlm(RIA_data_in = DICOM, off_right = 1, off_down = 0, off_z = 1)
+dim(DICOM$glrlm$ep_32)
+
+## ------------------------------------------------------------------------
+DICOM = glrlm(RIA_data_in = DICOM, use_type = "discretized",
+             off_right = 1, off_down = 0, off_z = 1)
+names(DICOM$glrlm)
+
+## ------------------------------------------------------------------------
+DICOM = glrlm_stat(DICOM, use_type = "single", use_slot = "glrlm$ep_2_101")
+
+## ------------------------------------------------------------------------
+DICOM = glrlm_stat(DICOM, use_type = "glrlm")
+names(DICOM$stat_glrlm)
+
+## ------------------------------------------------------------------------
+DICOM = glrlm_all(DICOM, use_type = "single")
+names(DICOM$glrlm)
+
+## ------------------------------------------------------------------------
+DICOM = glrlm_all(DICOM, use_type = "discretized")
+names(DICOM$glrlm)
+
+## ------------------------------------------------------------------------
+DICOM = geometry(RIA_data_in = DICOM, use_orig = TRUE, calc_sub = FALSE)
+RIA:::list_to_df(DICOM$stat_geometry$orig)
+
+## ------------------------------------------------------------------------
+DICOM = geometry(RIA_data_in = DICOM, use_slot = "discretized$es_2")
+RIA:::list_to_df(DICOM$stat_geometry$es_2)
+
+## ------------------------------------------------------------------------
+DICOM = geometry(DICOM, use_type = "discretized")
+names(DICOM$stat_geometry)
+

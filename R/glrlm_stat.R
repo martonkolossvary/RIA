@@ -28,15 +28,17 @@
 #' @return \emph{RIA_image} containing the statistical information.
 #'
 #' @examples \dontrun{
-#' #Dichotomize loaded image and then calculate GLRLM statistics
-#' RIA_image <- dichotomize(RIA_image, bins_in = 8, equal_prob = TRUE)
-#' RIA_image <- glrlm(RIA_image, use_orig = FALSE, use_slot = "dichotomized$ep_8",
+#' #Discretize loaded image and then calculate GLRLM statistics
+#' RIA_image <- discretize(RIA_image, bins_in = 8, equal_prob = TRUE)
+#' RIA_image <- glrlm(RIA_image, use_orig = FALSE, use_slot = "discretized$ep_8",
 #' right = TRUE, down = TRUE, forward = FALSE)
 #' RIA_image <- glrlm_stat(RIA_image, use_orig = FALSE, use_slot = "glrlm$ep_8_110")
 #' 
 #' #Batch calculation of GLRLM-based statistics on all calculated GLRLMs
-#' RIA_image <- glrlm_stat(RIA_image, use_type = "dichotomized")
+#' RIA_image <- glrlm_stat(RIA_image, use_type = "discretized")
 #' }
+#' 
+#' @references \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 
 
 

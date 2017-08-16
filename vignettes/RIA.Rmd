@@ -30,6 +30,8 @@ DICOM = load_dicom(filename = "C:\\DICOM\\")
 
 1. Converts DICOM files to RIA_image class using the *readDICOM* function of the *oro.dicom* package
 
+1. If **mask_filename** is provided, then the image is filtered one of two ways. If the **mask_filename** is the same as the **filename**, then the values in **keep_mask_values** indicate which voxels values to keep in the original image. This way the image can be segmented for a specific subset of voxels with given intensities. For example, if you would wish to only analyze  low-density non-calcified voxels, you could set the **keep_mask_values** to **-100:30**. If a different folder is given to **mask_filename**, then *RIA* loads the mask image as well. Using the **keep_mask_values**, you can select which values you consider to indicate which voxels to keep. By convention, the default is 1. However, multiple values may be given, which is convenient in cases when several regions of interest are provided in the mask image.
+
 1. The 2D or 3D image is croped to the smallest bounding box still containing the whole image. It is useful to minimize the size of the image to save memory. The **zero_value** supplied to the *load_dicom* function is used to identify voxels not containing any data. If it is not supplied, then the smallest value present in the dataset is considered as indicating voxels without any data. If for some reason it is important that the RIA_image be the same size (same x,y,z dimensions) as the original supplied image, then this functionality can be turn off by:
 
     ```{r, eval=FALSE}
@@ -271,7 +273,7 @@ names(DICOM$stat_glcm)
 The names of the outputs can also be specified. Be aware of providing the same amount of names as there are GLCMs being processed. Failing to do so will throw an error.
 
 ##Batch calculation of GLCM matrices in all directions
-To achieve rotationally invariant results, usually GLCM matrices are calculated in all directions. Using RIA, with one line of code you can calulate the GLCMs in all the different directions simply by calling:
+To achieve rotationally invariant results, usually GLCM matrices are calculated in all directions. Using RIA, with one line of code you can calculate the GLCMs in all the different directions simply by calling:
 ```{r}
 DICOM = glcm_all(DICOM, use_type = "single")
 names(DICOM$glcm)
@@ -326,7 +328,7 @@ names(DICOM$stat_glrlm)
 The names of the outputs can also be specified. Be aware of providing the same number of names as there are GLRLMs being processed. Failing to do so will throw an error.
 
 ##Batch calculation of GLRLM matrices in all directions
-To achieve rotationally invariant results, usually GLRLM matrices are calculated in all directions. Using RIA, with one line of code you can calulate the GLRLMs in all the different directions simply by calling:
+To achieve rotationally invariant results, usually GLRLM matrices are calculated in all directions. Using RIA, with one line of code you can calculate the GLRLMs in all the different directions simply by calling:
 ```{r}
 DICOM = glrlm_all(DICOM, use_type = "single")
 names(DICOM$glrlm)
