@@ -167,8 +167,10 @@ load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1,
   #mask image
   if(!is.null(mask_filename)) {
       if(identical(filename, mask_filename)) {
+          if(verbose_in) {message(paste0("CANCELING OUT VALUES OTHER THAN: ", keep_mask_values, "\n"))}
           data[!data %in% keep_mask_values] <- zero_value
       } else {
+          if(verbose_in) {message(paste0("LOADING DICOM IMAGES OF MASK IMAGE FROM: ", keep_mask_values, "\n"))}
           dcmImages_mask <- oro.dicom::readDICOM(mask_filename, recursive = recursive_in, exclude = exclude_in, verbose = verbose_in)
           if(length(dcmImages_mask$img)==1) {
               data_mask  <- suppressWarnings(oro.dicom::create3D(dcmImages_mask, mode = mode_in, transpose = transpose_in, pixelData = pixelData_in,
