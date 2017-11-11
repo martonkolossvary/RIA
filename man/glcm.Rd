@@ -74,5 +74,13 @@ off_right = 1, off_down = -1, off_z = 0)
 
 }
 \references{
+HARALICK Robert M. et al. Textural Features for Image Classification
+IEEE Transactions on Systems, Man, and Cybernetics. 1973; SMC-3:610-621.
+10.1109/TSMC.1973.4309314
+
+KOLOSSVÁRY Márton et al. Cardiac Computed Tomography Radiomics:
+A Comprehensive Review on Radiomic Techniques.
+Journal of Thoracic Imaging (2017).
+DOI: 10.1097/RTI.0000000000000268
 \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 }

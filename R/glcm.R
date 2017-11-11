@@ -60,7 +60,16 @@
 #' off_right = 1, off_down = -1, off_z = 0)
 #' }
 #' 
-#' @references \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' @references 
+#' HARALICK Robert M. et al. Textural Features for Image Classification.
+#' IEEE Transactions on Systems, Man, and Cybernetics. 1973; SMC-3:610-621.
+#' DOI: 10.1109/TSMC.1973.4309314
+#' 
+#' KOLOSSVÁRY Márton et al. Cardiac Computed Tomography Radiomics:
+#' A Comprehensive Review on Radiomic Techniques.
+#' Journal of Thoracic Imaging (2017).
+#' DOI: 10.1097/RTI.0000000000000268
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 
 glcm <- function(RIA_data_in, off_right = 1, off_down = 0, off_z = 0, symmetric = TRUE, normalize = TRUE, use_type = "single", use_orig = FALSE, use_slot = NULL, save_name = NULL, verbose_in = TRUE)
 {

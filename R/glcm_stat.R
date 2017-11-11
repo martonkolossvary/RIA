@@ -308,9 +308,9 @@ glcm_stat <- function(RIA_data_in, use_type = "single", use_orig = FALSE, use_sl
   Average_s             <- avg(data_in, type_in = "squared")
   Average_e             <- avg(data_in, type_in = "entropy")
 
-  Variance     <- variance(data_in, type_in = "single")
-  Variance_s   <- variance(data_in, type_in = "squared")
-  Variance_e   <- variance(data_in, type_in = "entropy")
+  Variances     <- variance(data_in, type_in = "single")
+  Variances_s   <- variance(data_in, type_in = "squared")
+  Variances_e   <- variance(data_in, type_in = "entropy")
 
   Correlation           <- correlation(data_in, type_in = "single")
   Correlation_s         <- correlation(data_in, type_in = "squared")
@@ -568,9 +568,9 @@ glcm_stat <- function(RIA_data_in, use_type = "single", use_orig = FALSE, use_sl
     Average               <- Average,
     Average_s             <- Average_s,
     Average_e             <- Average_e,
-    Variance     <- Variance,
-    Variance_s   <- Variance_s,
-    Variance_e   <- Variance_e,
+    Variances     <- Variances,
+    Variances_s   <- Variances_s,
+    Variances_e   <- Variances_e,
     Correlation           <- Correlation,
     Correlation_s         <- Correlation_s,
     Correlation_e         <- Correlation_e,
@@ -812,9 +812,9 @@ glcm_stat <- function(RIA_data_in, use_type = "single", use_orig = FALSE, use_sl
                       "Average",
                       "Average_s",
                       "Average_e",
-                      "Variance",
-                      "Variance_s",
-                      "Variance_e",
+                      "Variances",
+                      "Variances_s",
+                      "Variances_e",
                       "Correlation",
                       "Correlation_s",
                       "Correlation_e",

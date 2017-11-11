@@ -58,7 +58,16 @@
 #' off_right = 1, off_down = 1, off_z = 0)
 #' }
 #' 
-#' @references \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' @references 
+#' Galloway Mary M. et al. Texture analysis using gray level run lengths.
+#' Computer Graphics and Image Processing. 1975; 4:172-179.
+#' DOI: 10.1016/S0146-664X(75)80008-6
+#' 
+#' KOLOSSVÁRY Márton et al. Cardiac Computed Tomography Radiomics:
+#' A Comprehensive Review on Radiomic Techniques.
+#' Journal of Thoracic Imaging (2017).
+#' DOI: 10.1097/RTI.0000000000000268
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
 
 glrlm <- function(RIA_data_in, off_right = 1, off_down = 0, off_z = 0, use_type = "single", use_orig = FALSE, use_slot = NULL, save_name = NULL, verbose_in = TRUE)
 {

@@ -26,6 +26,10 @@
 #' to specify which voxel values to analyze. This way the provided image can be segmented to specific
 #' compontents. For example, if you wish to analyze only the low-density non-calcified component
 #' of coronary plaques, then \emph{keep_mask_values} can specify this by setting it to: -100:30
+#' 
+#' @param switch_z logical, indicating whether to change the orientation of the images in the Z axis. Some
+#' software reverse the order of the manipulated image in the Z axis, and therefore the images of the mask
+#' image need to be reveresed.
 #'
 #' @param crop_in logical, indicating whether to crop \emph{RIA_image} to smallest bounding box.
 #'
@@ -134,7 +138,7 @@
 #'  }
 
 
-load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1,
+load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1, switch_z = TRUE, 
                        crop_in = TRUE, replace_in = TRUE, center_in = TRUE,  zero_value = NULL, min_to = -1024,
                        header_add = NULL, header_exclude = NULL, verbose_in = TRUE,
                        recursive_in = TRUE, exclude_in = "sql",
@@ -167,10 +171,10 @@ load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1,
   #mask image
   if(!is.null(mask_filename)) {
       if(identical(filename, mask_filename)) {
-          if(verbose_in) {message(paste0("CANCELING OUT VALUES OTHER THAN: ", keep_mask_values, "\n"))}
+          if(verbose_in) {message(paste0("CANCELING OUT VALUES OTHER THAN THOSE SPECIFIED IN 'keep_mask_values' PARAMETER \n"))}
           data[!data %in% keep_mask_values] <- zero_value
       } else {
-          if(verbose_in) {message(paste0("LOADING DICOM IMAGES OF MASK IMAGE FROM: ", keep_mask_values, "\n"))}
+          if(verbose_in) {message(paste0("LOADING DICOM IMAGES OF MASK IMAGE FROM: ", mask_filename, "\n"))}
           dcmImages_mask <- oro.dicom::readDICOM(mask_filename, recursive = recursive_in, exclude = exclude_in, verbose = verbose_in)
           if(length(dcmImages_mask$img)==1) {
               data_mask  <- suppressWarnings(oro.dicom::create3D(dcmImages_mask, mode = mode_in, transpose = transpose_in, pixelData = pixelData_in,
@@ -182,12 +186,14 @@ load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1,
           
           if(!all(dim(data) == dim(data_mask))) {
               stop(paste0("DIMENSIONS OF THE IMAGE AND THE MASK ARE NOT EQUAL!\n",
-                          "DIMENSION OF IMAGE: ", dim(data), "\n",
-                          "DIMENSION OF MASK:  ", dim(data_mask), "\n"))
+                          "DIMENSION OF IMAGE: ", dim(data)[1], " ",  dim(data)[2], " ", dim(data)[3], "\n",
+                          "DIMENSION OF MASK:  ", dim(data_mask)[1], " ", dim(data_mask)[2], " ", dim(data_mask)[3], "\n"))
           } else {
+              if(switch_z) {data_mask[,,dim(data_mask)[3]:1] <- data_mask
+              message("MASK IMAGE WAS TRANSFORMED TO ACHIEVE PROPER ORIENTATION OF THE ORIGINAL AND THE MASK IMAGE.\n")
+              }
               data[!data_mask %in% keep_mask_values] <- zero_value
           }
-          
       }
   }
   
@@ -204,9 +210,9 @@ load_dicom <- function(filename, mask_filename = NULL, keep_mask_values = 1,
   
   if(!is.null(mask_filename)) {
     if(identical(filename, mask_filename)) {
-      RIA_image$log$events  <- paste0("Filtered_using_", keep_mask_values)
+      RIA_image$log$events  <- "Filtered_using_"
     } else {
-      RIA_image$log$events  <- paste0("Filtered_using_mask_values_", keep_mask_values)
+      RIA_image$log$events  <- "Filtered_using_mask_values_"
     }
   }
   

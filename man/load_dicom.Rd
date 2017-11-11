@@ -5,7 +5,7 @@
 \title{Loads DICOM images to RIA image format}
 \usage{
 load_dicom(filename, mask_filename = NULL, keep_mask_values = 1,
-  crop_in = TRUE, replace_in = TRUE, center_in = TRUE,
+  switch_z = TRUE, crop_in = TRUE, replace_in = TRUE, center_in = TRUE,
   zero_value = NULL, min_to = -1024, header_add = NULL,
   header_exclude = NULL, verbose_in = TRUE, recursive_in = TRUE,
   exclude_in = "sql", mode_in = "integer", transpose_in = TRUE,
@@ -26,6 +26,10 @@ case supplying several integers is allowed. Furthermore, if the same string is s
 to specify which voxel values to analyze. This way the provided image can be segmented to specific
 compontents. For example, if you wish to analyze only the low-density non-calcified component
 of coronary plaques, then \emph{keep_mask_values} can specify this by setting it to: -100:30}
+
+\item{switch_z}{logical, indicating whether to change the orientation of the images in the Z axis. Some
+software reverse the order of the manipulated image in the Z axis, and therefore the images of the mask
+image need to be reveresed.}
 
 \item{crop_in}{logical, indicating whether to crop \emph{RIA_image} to smallest bounding box.}
 
