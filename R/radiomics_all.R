@@ -9,7 +9,7 @@
 #' discretizations. Geometry-based statistics are calculated for the original image as well as all
 #' discretizations is requested. 
 #' 
-#' @param RIA_data_in \emph{RIA_image}, created by \code{\link[RIA]{load_dicom}}.
+#' @param RIA_data_in \emph{RIA_image}.
 #' 
 #' @param bins_in integer vector, number of bins specified.
 #' 
@@ -41,6 +41,20 @@
 #' RIA_image <- radiomics_all(RIA_image, equal_prob = FALSE, bins_in= c(2,8,32,128), distance = c(1:3))
 #' RIA_image <- radiomics_all(RIA_image, equal_prob = TRUE, bins_in= c(2,8,32,128), distance = c(1:3))
 #' }
+#' 
+#' @references Márton KOLOSSVÁRY et al.
+#' Radiomic Features Are Superior to Conventional Quantitative Computed Tomographic
+#' Metrics to Identify Coronary Plaques With Napkin-Ring Sign
+#' Circulation: Cardiovascular Imaging (2017).
+#' DOI: 10.1161/circimaging.117.006843
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/29233836}
+#' 
+#' Márton KOLOSSVÁRY et al.
+#' Cardiac Computed Tomography Radiomics: A Comprehensive Review on Radiomic Techniques.
+#' Journal of Thoracic Imaging (2018).
+#' DOI: 10.1097/RTI.0000000000000268
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' @encoding UTF-8
 
 radiomics_all <- function(RIA_data_in, bins_in=c(2,8,32,128), equal_prob = FALSE,
                           fo_discretized = FALSE,
@@ -51,7 +65,7 @@ radiomics_all <- function(RIA_data_in, bins_in=c(2,8,32,128), equal_prob = FALSE
   RIA_data_in <- discretize(RIA_data_in, bins_in=bins_in, equal_prob = equal_prob, verbose_in = verbose_in)
   
   RIA_data_in <- first_order(RIA_data_in, use_type = "single", use_orig = TRUE, verbose_in = verbose_in)
-  if(geometry_discretized) {RIA_data_in <- first_order(RIA_data_in, use_type = "discretized", verbose_in = verbose_in)}
+  if(fo_discretized) {RIA_data_in <- first_order(RIA_data_in, use_type = "discretized", verbose_in = verbose_in)}
   
   for (i in 1: length(distance)) {
   RIA_data_in <- glcm_all(RIA_data_in, use_type = "discretized", distance = distance[i], verbose_in = verbose_in)
@@ -65,5 +79,5 @@ radiomics_all <- function(RIA_data_in, bins_in=c(2,8,32,128), equal_prob = FALSE
   
   RIA_data_in <- geometry(RIA_data_in, use_orig = TRUE, calc_sub = FALSE, verbose_in = verbose_in)
   if(geometry_discretized) {RIA_data_in <- geometry(RIA_data_in, use_type = "discretized", calc_sub = TRUE, verbose_in = verbose_in)}
-  
+  RIA_data_in
 }

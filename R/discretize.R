@@ -13,7 +13,7 @@
 #' different bin numbers can be saved to the same object for further analysis.
 #' The \emph{RIA_log} will be updated with cut points.
 #'
-#' @param RIA_data_in \emph{RIA_image}, created by \code{\link[RIA]{load_dicom}}.
+#' @param RIA_data_in \emph{RIA_image}.
 #'
 #' @param bins_in integer vector, number of bins specified.
 #'
@@ -46,7 +46,20 @@
 #'  
 #' #D
 #' }
-
+#' 
+#' @references Márton KOLOSSVÁRY et al.
+#' Radiomic Features Are Superior to Conventional Quantitative Computed Tomographic
+#' Metrics to Identify Coronary Plaques With Napkin-Ring Sign
+#' Circulation: Cardiovascular Imaging (2017).
+#' DOI: 10.1161/circimaging.117.006843
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/29233836}
+#' 
+#' Márton KOLOSSVÁRY et al.
+#' Cardiac Computed Tomography Radiomics: A Comprehensive Review on Radiomic Techniques.
+#' Journal of Thoracic Imaging (2018).
+#' DOI: 10.1097/RTI.0000000000000268
+#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' @encoding UTF-8
 
 discretize <- function(RIA_data_in, bins_in=8, equal_prob = FALSE, use_orig = TRUE, write_orig = FALSE, verbose_in = TRUE)
 {
