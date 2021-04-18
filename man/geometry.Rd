@@ -5,11 +5,20 @@
 \alias{geometry}
 \title{Calculates geometry-based parameters of RIA image}
 \usage{
-geometry(RIA_data_in, xy_dim = RIA_data_in$log$orig_xy_dim,
-  z_dim = RIA_data_in$log$orig_z_dim, all_vol = RIA_data_in$log$orig_vol_mm,
-  all_surf = RIA_data_in$log$orig_surf_mm, calc_dist = FALSE,
-  calc_sub = TRUE, use_type = "single", use_orig = FALSE,
-  use_slot = NULL, save_name = NULL, verbose_in = TRUE)
+geometry(
+  RIA_data_in,
+  xy_dim = RIA_data_in$log$orig_xy_dim,
+  z_dim = RIA_data_in$log$orig_z_dim,
+  all_vol = RIA_data_in$log$orig_vol_mm,
+  all_surf = RIA_data_in$log$orig_surf_mm,
+  calc_dist = FALSE,
+  calc_sub = TRUE,
+  use_type = "single",
+  use_orig = FALSE,
+  use_slot = NULL,
+  save_name = NULL,
+  verbose_in = TRUE
+)
 }
 \arguments{
 \item{RIA_data_in}{\emph{RIA_image}.}
@@ -83,11 +92,11 @@ Radiomic Features Are Superior to Conventional Quantitative Computed Tomographic
 Metrics to Identify Coronary Plaques With Napkin-Ring Sign
 Circulation: Cardiovascular Imaging (2017).
 DOI: 10.1161/circimaging.117.006843
-\url{https://www.ncbi.nlm.nih.gov/pubmed/29233836}
+\url{https://pubmed.ncbi.nlm.nih.gov/29233836/}
 
 Márton KOLOSSVÁRY et al.
 Cardiac Computed Tomography Radiomics: A Comprehensive Review on Radiomic Techniques.
 Journal of Thoracic Imaging (2018).
 DOI: 10.1097/RTI.0000000000000268
-\url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+\url{https://pubmed.ncbi.nlm.nih.gov/28346329/}
 }

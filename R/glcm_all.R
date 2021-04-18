@@ -11,7 +11,7 @@
 #' will be returned.
 #' In case of 2D datasets, instead of 8 GLCMs, only 4 are returned by default. If the \emph{symmetric}
 #' parameter is set to \emph{FALSE} then all 8 non-symmetrical GLCM matrices are returned.
-#' For detailes see: \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' For detailes see: \url{https://pubmed.ncbi.nlm.nih.gov/28346329/}
 #' By default the \emph{use_type} is set to \emph{discretize}, therefore GLCMs will be calculated
 #' for all discretized images in all directions. Also \emph{single} data processing is supported, 
 #' then by default the image in the \emph{$modif} slot will be used. If \emph{use_slot} is given,
@@ -68,13 +68,13 @@
 #' Metrics to Identify Coronary Plaques With Napkin-Ring Sign
 #' Circulation: Cardiovascular Imaging (2017).
 #' DOI: 10.1161/circimaging.117.006843
-#' \url{https://www.ncbi.nlm.nih.gov/pubmed/29233836}
+#' \url{https://pubmed.ncbi.nlm.nih.gov/29233836/}
 #' 
 #' Márton KOLOSSVÁRY et al.
 #' Cardiac Computed Tomography Radiomics: A Comprehensive Review on Radiomic Techniques.
 #' Journal of Thoracic Imaging (2018).
 #' DOI: 10.1097/RTI.0000000000000268
-#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' \url{https://pubmed.ncbi.nlm.nih.gov/28346329/}
 #' @encoding UTF-8
 
 glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TRUE, use_type = "discretized", use_orig = FALSE, use_slot = NULL, save_name = NULL, verbose_in = TRUE)
@@ -87,35 +87,35 @@ glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TR
     
     if(dim_image == 3 & symmetric == FALSE)  {
         offsets <- matrix(c( 1, 0, 0,
-                            -1, 0, 0,
+                             -1, 0, 0,
                              0, 1, 0,
                              0,-1, 0,
                              1, 1, 0,
-                            -1,-1, 0,
+                             -1,-1, 0,
                              1,-1, 0,
-                            -1, 1, 0,
-                            
+                             -1, 1, 0,
+                             
                              1, 0, 1,
-                            -1, 0, 1,
+                             -1, 0, 1,
                              0, 1, 1,
                              0,-1, 1,
                              1, 1, 1,
-                            -1,-1, 1,
+                             -1,-1, 1,
                              1,-1, 1,
-                            -1, 1, 1,
-                            
+                             -1, 1, 1,
+                             
                              1, 0,-1,
-                            -1, 0,-1,
+                             -1, 0,-1,
                              0, 1,-1,
                              0,-1,-1,
                              1, 1,-1,
-                            -1,-1,-1,
+                             -1,-1,-1,
                              1,-1,-1,
-                            -1, 1,-1,
-                            
+                             -1, 1,-1,
+                             
                              0, 0, 1,
                              0, 0,-1
-    ), nrow = 26, ncol = 3, byrow = TRUE)
+        ), nrow = 26, ncol = 3, byrow = TRUE)
     }
     
     if(dim_image == 3 & symmetric == TRUE)  {
@@ -123,30 +123,30 @@ glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TR
                              0, 1, 0,
                              1, 1, 0,
                              1,-1, 0,
-
+                             
                              1, 0, 1,
                              0, 1, 1,
                              1, 1, 1,
                              1,-1, 1,
-
+                             
                              1, 0,-1,
                              0, 1,-1,
                              1, 1,-1,
                              1,-1,-1,
-
+                             
                              0, 0, 1
         ), nrow = 13, ncol = 3, byrow = TRUE)
     }
     
     if(dim_image == 2 & symmetric == FALSE)  {
         offsets <- matrix(c( 1, 0, 0,
-                            -1, 0, 0,
+                             -1, 0, 0,
                              0, 1, 0,
                              0,-1, 0,
                              1, 1, 0,
-                            -1,-1, 0,
+                             -1,-1, 0,
                              1,-1, 0,
-                            -1, 1, 0
+                             -1, 1, 0
         ), nrow = 8, ncol = 3, byrow = TRUE)
     }
     
@@ -161,9 +161,9 @@ glcm_all <- function(RIA_data_in, distance = 1, symmetric = TRUE, normalize = TR
     offsets <- offsets * distance
     
     if(!is.null(save_name) & (dim(offsets)[1] != length(save_name))) {stop(paste0("PLEASE PROVIDE THE SAME NUMBER OF NAMES AS THERE ARE IMAGES!\n",
-                                                                                       "NUMBER OF NAMES:  ", length(save_name), "\n",
-                                                                                       "NUMBER OF IMAGES: ", dim(offsets)[1], "\n"))
-        }
+                                                                                  "NUMBER OF NAMES:  ", length(save_name), "\n",
+                                                                                  "NUMBER OF IMAGES: ", dim(offsets)[1], "\n"))
+    }
     
     for (i in 1: dim(offsets)[1])
     {

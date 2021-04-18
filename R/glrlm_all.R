@@ -51,18 +51,19 @@
 #' #Batch calculation of GLCM matrices on all disretized images
 #' RIA_image <- glrlm_all(RIA_image)
 #' }
+#' 
 #' @references Márton KOLOSSVÁRY et al.
 #' Radiomic Features Are Superior to Conventional Quantitative Computed Tomographic
 #' Metrics to Identify Coronary Plaques With Napkin-Ring Sign
 #' Circulation: Cardiovascular Imaging (2017).
 #' DOI: 10.1161/circimaging.117.006843
-#' \url{https://www.ncbi.nlm.nih.gov/pubmed/29233836}
+#' \url{https://pubmed.ncbi.nlm.nih.gov/29233836/}
 #' 
 #' Márton KOLOSSVÁRY et al.
 #' Cardiac Computed Tomography Radiomics: A Comprehensive Review on Radiomic Techniques.
 #' Journal of Thoracic Imaging (2018).
 #' DOI: 10.1097/RTI.0000000000000268
-#' \url{https://www.ncbi.nlm.nih.gov/pubmed/28346329}
+#' \url{https://pubmed.ncbi.nlm.nih.gov/28346329/}
 #' @encoding UTF-8
 #' 
 
@@ -110,7 +111,7 @@ glrlm_all <- function(RIA_data_in, use_type = "discretized", use_orig = FALSE, u
     for (i in 1: dim(offsets)[1])
     {
         RIA_data_in <- glrlm(RIA_data_in, off_right = offsets[i,1], off_down = offsets[i,2], off_z = offsets[i,3],
-                            use_type = use_type, use_orig = use_orig, use_slot = use_slot, save_name = save_name[i], verbose_in = verbose_in)
+                             use_type = use_type, use_orig = use_orig, use_slot = use_slot, save_name = save_name[i], verbose_in = verbose_in)
     }
     
     return(RIA_data_in)
