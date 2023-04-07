@@ -1,6 +1,6 @@
 # Retrieves NIFTI header information from images in directory
 #
-# reuturn Returns a RIA_header object contining the NIFTI header information as a list
+# Returns a RIA_header object containing the NIFTI header information as a list
 # (c): Márton Kolossváry, 2018
 
 
@@ -26,8 +26,14 @@ create_header_nifti <- function(directory)
   }
   
   PixelSpacing <- as.numeric(substr( header_list$`Pixel Dimension`, 1, regexpr(' ', header_list$`Pixel Dimension`)[1]-1))
-  SpacingBetweenSlices <- as.numeric(substr( header_list$`Pixel Dimension`, gregexpr('x', header_list$`Pixel Dimension`)[[1]][2]+2,
-                                             nchar(header_list$`Pixel Dimension`)))
+  if(length(gregexpr('x', header_list$`Pixel Dimension`)[[1]]) > 2) {
+    SpacingBetweenSlices <- as.numeric(substr( header_list$`Pixel Dimension`, gregexpr('x', header_list$`Pixel Dimension`)[[1]][2]+2,
+                                               gregexpr('x', header_list$`Pixel Dimension`)[[1]][3]-2))
+  } else {
+    SpacingBetweenSlices <- as.numeric(substr( header_list$`Pixel Dimension`, gregexpr('x', header_list$`Pixel Dimension`)[[1]][2]+2,
+                                               nchar(header_list$`Pixel Dimension`)))
+  }
+
   header_list[["PixelSpacing"]] <- PixelSpacing
   header_list[["SpacingBetweenSlices"]] <- SpacingBetweenSlices
   
