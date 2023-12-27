@@ -195,7 +195,7 @@ And that's it! There you have your first radiomics analysis!
 
 ## Parallelization
 
-Parallelization of the functions on CPUs or GPUs can take significantly longer in case of small images and few different voxel values. Finding the optimal values where parallelization might be beneficial is not straight forward. Also, *RIA* is a research tool, therefore it is meant to be used for the radiomic calculations of many exported radiological images at once, rather then running on a single image real-time as fast as possible. Therefore, the core functions of *RIA* are not parallelized. However, using a few lines of code *RIA* can be run parallel on multiple cores, where each core calculates the parameter of an individual image. This is more efficient and faster when we have batches of images to calculate on, as all cores can run on maximum at all times, while if the core functions themselves would be parallelized, it would not run at maximum efficiency many times while the processes are waiting for each sub-tasks to finish. In the following sample code, you can appreciate the simpleness of setting up such a parallelization to calculate radiomic parameters for a batch of images. In the example each patient has a separate folder in which there are nrrd files containing the whole image (these files contain the word: "heart") and mask images (these files contain the word: "plaque"). There are many possibilities to parallelize such batches in R. We will use the *doParallel* package to set up the multiple core functionality, and the *foreach* package to parallelize the for cycle which cycles through the patient folders
+Parallelization of the functions on CPUs or GPUs can take significantly longer in case of small images and few different voxel values. Finding the optimal values where parallelization might be beneficial is not straight forward. Also, *RIA* is a research tool, therefore it is meant to be used for the radiomic calculations of many exported radiological images at once, rather then running on a single image real-time as fast as possible. Therefore, the core functions of *RIA* are not parallelized. However, using a few lines of code *RIA* can be run parallel on multiple cores, where each core calculates the parameter of an individual image. This is more efficient and faster when we have batches of images to calculate on, as all cores can run on maximum at all times, while if the core functions themselves would be parallelized, it would not run at maximum efficiency many times while the processes are waiting for each sub-tasks to finish. In the following sample code, you can appreciate the simpleness of setting up such a parallelization to calculate radiomic parameters for a batch of images. In the example each patient has a separate folder in which there are nrrd files containing the whole image (these files contain the word: "heart") and mask images (these files contain the word: "plaque"). There are many possibilities to parallelize such batches in R. We will use the *future* package to set up the multiple core functionality, and the *foreach* and *doFuture* packages to parallelize the for cycle which cycles through the patient folders
 
 ```{r}
 folder <- "/Images/" #Location of folder containing individual folders per patient which contain nrrd files for the image and mask
@@ -204,12 +204,16 @@ out <- "/CSV/" #Location of folder where the results will be dumped
 patients <- list.dirs(folder, recursive = FALSE, full.names = FALSE) #Name of patient folders
 patients_full <- list.dirs(folder, recursive = FALSE, full.names = TRUE) #Name of patient folders with full file path name
 
-library(foreach); library(doParallel); library(RIA) #Load required packages
-doParallel::registerDoParallel(7) #Define how many threads to use, usually use the number of threads-1
+library(foreach); library(future); library(doFuture); library(RIA) #Load required packages
+options(future.globals.maxSize = +Inf) #Allow infinite memory for separate processes
+future::plan(future::multisession, workers = parallel::detectCores()-1) #Define how many threads to use, usually use the number of threads-1
 
 #Use parallelized for cycle to cycle through all the patients
-data_out_paral <- foreach (i = 1:length(patients), .combine="rbind", .inorder=FALSE,
-                           .packages=c('RIA'), .errorhandling = c("pass"), .verbose=FALSE) %dopar% {
+data_out_paral <- foreach::foreach (i = 1:length(patients), .combine="rbind", .inorder=FALSE,
+                           .options.future = list(preschedule = FALSE,
+                                                  packages = c("RIA"),
+                                                  globals = structure(TRUE, add = c("patients", "patients_full", "folder", "out"))),
+                           .errorhandling = c("pass"), .verbose=FALSE) %dofuture% {
                              
                              files <- list.files(patients_full[i]) #Names of the files in the current patient folder
                              image <- grep("heart", files, ignore.case = T, value = T) #Full name of the image file

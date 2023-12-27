@@ -1,8 +1,8 @@
 Package: RIA
 Type: Package
 Title: Radiomics Image Analysis Toolbox for Medial Images
-Version: 1.7.1
-Date: 2023-05-19
+Version: 1.7.2
+Date: 2024-01-03
 Authors@R: person("Marton", "Kolossvary", role = c("aut", "cre"), email = "marton.kolossvary@gmail.com")
 Maintainer: Marton Kolossvary <marton.kolossvary@gmail.com>
 Description: Radiomics image analysis toolbox for 2D and 3D radiological images. RIA supports DICOM, NIfTI,
