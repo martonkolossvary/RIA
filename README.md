@@ -23,8 +23,6 @@ images. Almost all calculations are vectorized and therefore are
 super-efficient. The package is developed by Márton Kolossváry a medical
 doctor not an engineer, therefore all functionalities of the software
 package are developed in a way that can be learnt by non-professionals.
-`RIA` is constantly updated with new functionalities and wrap-around
-functions to make the calculation of radiomic metrics even simpler.
 
 ## Installation
 
@@ -225,45 +223,45 @@ DICOM = load_dicom(filename = "C:/DICOM/", header_exclude = exclude)
   *load_dicom*, *load_nifti*, *load_nrrd* and *load_npy* adds the
   following to the log if possible:
 
-  - `DICOM$log$events` is a vector containing the ran processes.
+- `DICOM$log$events` is a vector containing the ran processes.
 
-  - `DICOM$log$orig_dim` is a vector containing the original dimensions
-    of the DICOM image.
+- `DICOM$log$orig_dim` is a vector containing the original dimensions of
+  the DICOM image.
 
-  - `DICOM$log$directory` is a string containing the location of the
-    DICOM images.
+- `DICOM$log$directory` is a string containing the location of the DICOM
+  images.
 
-  - `DICOM$log$logic_x` is a vector with a length of the original x
-    dimension. Ones indicate slices which contained data and zeros which
-    did not in the x dimension. Same is true for `DICOM$log$logic_y` and
-    `DICOM$log$logic_z`.
+- `DICOM$log$logic_x` is a vector with a length of the original x
+  dimension. Ones indicate slices which contained data and zeros which
+  did not in the x dimension. Same is true for `DICOM$log$logic_y` and
+  `DICOM$log$logic_z`.
 
-  - `DICOM$log$zero_value` is a number indicating the value that was
-    considered to indicate no data
+- `DICOM$log$zero_value` is a number indicating the value that was
+  considered to indicate no data
 
-  - `DICOM$log$changed_to` is the value to which voxel considered not to
-    have any data were transferred to.
+- `DICOM$log$changed_to` is the value to which voxel considered not to
+  have any data were transferred to.
 
-  - `DICOM$log$shift` the value that was added to all voxel values to
-    achieve proper values.
+- `DICOM$log$shift` the value that was added to all voxel values to
+  achieve proper values.
 
-  - `DICOM$log$orig_vol_mm` the volume of the original image. The volume
-    is calculated by calculating how many voxels contain data and
-    multiplying it by x,y and z length of the voxels.
+- `DICOM$log$orig_vol_mm` the volume of the original image. The volume
+  is calculated by calculating how many voxels contain data and
+  multiplying it by x,y and z length of the voxels.
 
-  - `DICOM$log$orig_surf_mm` the surface of the original image. The
-    surface is calculated by assessing which sides of the voxels do not
-    have any neighbors and then summing all of these surfaces which are
-    calculated from the lengths of the sides of the voxels.
+- `DICOM$log$orig_surf_mm` the surface of the original image. The
+  surface is calculated by assessing which sides of the voxels do not
+  have any neighbors and then summing all of these surfaces which are
+  calculated from the lengths of the sides of the voxels.
 
-  - `DICOM$log$surface_volume_r` the value of the surface to volume
-    ratio of the original image.
+- `DICOM$log$surface_volume_r` the value of the surface to volume ratio
+  of the original image.
 
-  - `DICOM$log$orig_xy_dim` the length of each voxel in the x and the y
-    planes. This is also called the in-plane resolution
+- `DICOM$log$orig_xy_dim` the length of each voxel in the x and the y
+  planes. This is also called the in-plane resolution
 
-  - `DICOM$log$orig_z_dim` the length of each voxel in the z plane. This
-    is also called the cross-plane resolution.
+- `DICOM$log$orig_z_dim` the length of each voxel in the z plane. This
+  is also called the cross-plane resolution.
 
 As we will see, functions can add new elements to the log and also add
 new slots to the *RIA_image*. If the loading was successful, we will be
@@ -302,8 +300,8 @@ slot is updated based on the new combined image, while data in the
 
 ``` r
 # Load multiple images and combine them
-d1 <- load_nifti(ABC_p1.nii.gz, crop_in = FALSE)
-d2 <- load_nifti(ABC_p2.nii.gz, crop_in = FALSE)
+d1 <- load_nifti("ABC_p1.nii.gz", crop_in = FALSE)
+d2 <- load_nifti("ABC_p2.nii.gz", crop_in = FALSE)
 d  <- merge_RIA(list(d1, d2))
 ```
 
@@ -363,16 +361,18 @@ it would not run at maximum efficiency many times while the processes
 are waiting for each sub-tasks to finish. In the following sample code,
 you can appreciate the simpleness of setting up such a parallelization
 to calculate radiomic parameters for a batch of images. In the example
-each patient has a separate folder in which there are nrrd files
+each patient has a separate folder in which there are nifti files
 containing the whole image (these files contain the word: “heart”) and
-mask images (these files contain the word: “plaque”). There are many
+mask images (these files contain the word: “plaque”). Radiomic features
+are calculated for the whole plaque and also noncalcified and calcified
+plaque components defined using absolute HU thresholds. There are many
 possibilities to parallelize such batches in R. We will use the *future*
 package to set up the multiple core functionality, and the *foreach* and
 *doFuture* packages to parallelize the for cycle which cycles through
 the patient folders
 
 ``` r
-folder <- "/Images/" #Location of folder containing individual folders per patient which contain nrrd files for the image and mask
+folder <- "/Images/" #Location of folder containing individual folders per patient which contain nifti files for the image and mask
 out <- "/CSV/" #Location of folder where the results will be dumped
 
 patients <- list.dirs(folder, recursive = FALSE, full.names = FALSE) #Name of patient folders
@@ -382,23 +382,52 @@ library(foreach); library(future); library(doFuture); library(RIA) #Load require
 options(future.globals.maxSize = +Inf) #Allow infinite memory for separate processes
 future::plan(future::multisession, workers = parallel::detectCores()-1) #Define how many threads to use, usually use the number of threads-1
 
+library(progressr) #Create progress bar
+progressr::handlers(progressr::handler_progress(
+  format   = ":spin [:bar] :percent in :elapsed ETA: :eta",
+  complete = "="
+))
+progressr::handlers(global = TRUE)
+
 #Use parallelized for cycle to cycle through all the patients
-data_out_paral <- foreach::foreach (i = 1:length(patients), .combine="rbind", .inorder=FALSE,
-                           .options.future = list(preschedule = FALSE,
-                                                  packages = c("RIA"),
-                                                  globals = structure(TRUE, add = c("patients", "patients_full", "folder", "out"))),
-                           .errorhandling = c("pass"), .verbose=FALSE) %dofuture% {
-                             
-                             files <- list.files(patients_full[i]) #Names of the files in the current patient folder
-                             image <- grep("heart", files, ignore.case = T, value = T) #Full name of the image file
-                             masks <- grep("plaque", files, ignore.case = T, value = T) #Full name of the mask files
-                             
-                             #RUN RIA
-                             IMAGE <- load_nrrd(filename = paste0(patients_full[i], "/", image),
-                                                     mask_filename = paste0(patients_full[i], "/", masks), switch_z = FALSE) #Load image and mask files
-                             IMAGE <- radiomics_all(IMAGE,  equal_prob = "both", bins_in= c(4, 8, 16)) #Calculate radiomic features
-                             save_RIA(IMAGE, save_to = out, save_name = patients[i], group_name = patients[i]) #Export results into csv
-                           }
+calculate_radiomics <- function() {
+  p <- progressr::progressor(steps = length(patients))
+  data_out_paral <- foreach::foreach (i = 1:length(patients), .combine="rbind", .inorder=FALSE,
+                                      .options.future = list(chunk.size = 1.0,
+                                                             globals = structure(TRUE, add = c("patients", "patients_full", "folder", "out"))),
+                                      .errorhandling = c("pass"), .verbose=FALSE) %dofuture% {
+                                        
+                                        files <- list.files(patients_full[i]) #Names of the files in the current patient folder
+                                        image <- grep("heart", files, ignore.case = T, value = T) #Full name of the image file
+                                        masks <- grep("plaque", files, ignore.case = T, value = T) #Full name of the mask files
+                                        
+                                        #Radiomic calculations on the whole plaque
+                                        IMAGE <- load_nifti(filename = paste0(patients_full[i], "/", image),
+                                                            mask_filename = paste0(patients_full[i], "/", masks), switch_z = FALSE, verbose_in = FALSE) #Load image and mask files
+                                        IMAGE <- radiomics_all(IMAGE,  equal_prob = "both", verbose_in = FALSE) #Calculate radiomic features
+                                        save_RIA(IMAGE, save_to = out, save_name = paste0(patients[i], "_ALL"), group_name = patients[i]) #Export results into csv
+                                        
+                                        #Radiomic calculations on the noncalcified plaque component
+                                        IMAGE <- load_nifti(filename = paste0(patients_full[i], "/", image), keep_mask_values = "<=350",
+                                                            mask_filename = paste0(patients_full[i], "/", masks), switch_z = FALSE, verbose_in = FALSE) #Load image and mask files
+                                        if(IMAGE$log$orig_vol_mm != 0){
+                                          IMAGE <- radiomics_all(IMAGE,  equal_prob = "both", verbose_in = FALSE) #Calculate radiomic features
+                                          save_RIA(IMAGE, save_to = out, save_name = paste0(patients[i], "_NCP"), group_name = patients[i]) #Export results into csv
+                                        }
+                                        
+                                       #Radiomic calculations on the calcified plaque component
+                                        IMAGE <- load_nifti(filename = paste0(patients_full[i], "/", image), keep_mask_values = ">350",
+                                                            mask_filename = paste0(patients_full[i], "/", masks), switch_z = FALSE, verbose_in = FALSE) #Load image and mask files
+                                        if(IMAGE$log$orig_vol_mm != 0){
+                                          IMAGE <- radiomics_all(IMAGE,  equal_prob = "both", verbose_in = FALSE) #Calculate radiomic features
+                                          save_RIA(IMAGE, save_to = out, save_name = paste0(patients[i], "_CP"), group_name = patients[i]) #Export results into csv
+                                        }
+                                        
+                                        p(sprintf("i=%g", i)) #Update progress bar
+                                      }
+}
+calculate_radiomics()
+future::plan(future::sequential()) #Reset to sequential processing
 ```
 
 The disadvantage of parallelizing the for cycle rather then the core
@@ -412,9 +441,9 @@ for calculation.
 From v1.7.0 only wrapper functions are exported in the Namespace of
 *RIA* as these allow full functionality without needing to know anything
 about what is happening under the hood. Nevertheless, previous functions
-that were available in *RIA* are still presnet with all thier
+that were available in *RIA* are still present with all their
 functionalities and documentation, but they can only be accessed by
-specificlaly calling them using **RIA:::function()**. From here on,
+specifically calling them using **RIA:::function()**. From here on,
 these functionalities are presented.
 
 ## Discretization of voxel values
@@ -609,9 +638,9 @@ statistics is needed.
 
 ``` r
 DICOM = RIA:::first_order(RIA_data_in = DICOM, use_type = "discretized",
-                    save_name = c("Name_1", "Name_2", "Name_3", "Name_4",
-                                  "Name_5", "Name_6", "Name_7", "Name_8",
-                                  "Name_9", "Name_10"))
+                          save_name = c("Name_1", "Name_2", "Name_3", "Name_4",
+                                        "Name_5", "Name_6", "Name_7", "Name_8",
+                                        "Name_9", "Name_10"))
 names(DICOM$stat_fo)
 ```
 
@@ -623,7 +652,7 @@ problems in later analyses.
 
 ``` r
 DICOM = RIA:::first_order(RIA_data_in = DICOM, use_type = "discretized",
-                    save_name = c("Name_1", "Name_2", "Name_3", "Name_4"))
+                          save_name = c("Name_1", "Name_2", "Name_3", "Name_4"))
 ```
 
 ## Gray level co-occurrence matrix (GLCM) calculations and statistics
@@ -706,7 +735,7 @@ do is:
 
 ``` r
 DICOM = RIA:::glcm(RIA_data_in = DICOM, use_type = "discretized",
-             off_right = 1, off_down = 2, off_z = 2)
+                   off_right = 1, off_down = 2, off_z = 2)
 names(DICOM$glcm)
 ```
 
@@ -855,7 +884,7 @@ discretizations all you have to do is:
 
 ``` r
 DICOM = RIA:::glrlm(RIA_data_in = DICOM, use_type = "discretized",
-              off_right = 1, off_down = 0, off_z = 1)
+                    off_right = 1, off_down = 0, off_z = 1)
 names(DICOM$glrlm)
 ```
 

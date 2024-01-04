@@ -16,7 +16,7 @@ License: AGPL-3
 Depends: R (>= 3.3.0)
 Imports: oro.dicom (>= 0.5.0), oro.nifti (>= 0.9.1)
 LazyData: TRUE
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 NeedsCompilation: no
 Suggests: knitr,
     rmarkdown,
